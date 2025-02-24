@@ -2,8 +2,8 @@
 
 namespace App\Services\User;
 
+use App\Jobs\WelcomeEmailJob;
 use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -12,6 +12,7 @@ class UserService
     {
         try {
             $user = User::create($data);
+            WelcomeEmailJob::dispatch($user->email);
             return response()->json([
                 'status'  => 201,
                 'message' => 'User registered successfully.',
